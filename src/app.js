@@ -1,0 +1,20 @@
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import { env } from './config/env.js';
+import { errorHandler } from './middlewares/error-handler.js';
+import { notFound } from './middlewares/not-found.js';
+import { apiRateLimiter } from './middlewares/rate-limiter.js';
+import { requestLogger } from './middlewares/request-logger.js';
+import { healthRoutes } from './modules/health/routes.js';
+
+export const app = express();
+app.use(requestLogger);
+app.use(helmet());
+app.use(cors({ origin: env.CORS_ORIGIN.split(',').map((origin) => origin.trim()) }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use('/api', apiRateLimiter);
+app.use('/api/v1', healthRoutes);
+app.use(notFound);
+app.use(errorHandler);
