@@ -32,8 +32,8 @@ export const appointmentsService = {
     return { items, nextCursor: rows.length > query.limit ? items.at(-1).id : null };
   },
 
-  async updateStatus({ businessId, appointmentId, status }) {
-    const result = await appointmentsRepository.updateStatus({ businessId, appointmentId, status });
+  async updateStatus({ businessId, appointmentId, status, actorUserId }) {
+    const result = await appointmentsRepository.updateStatus({ businessId, appointmentId, status, actorUserId });
     if (result.kind === 'not-found') throw new AppError('Appointment not found', { statusCode: 404, code: 'APPOINTMENT_NOT_FOUND' });
     if (result.kind === 'invalid-transition') throw new AppError('That appointment status change is not allowed', { statusCode: 409, code: 'INVALID_APPOINTMENT_TRANSITION' });
     return result.appointment;

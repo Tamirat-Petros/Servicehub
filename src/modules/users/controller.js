@@ -7,12 +7,14 @@ export const usersController = {
     ...req.body,
     businessId: req.tenant.businessId,
     actorRole: req.tenant.role,
+    actorUserId: req.auth.userId,
   }) }),
   removeMembership: async (req, res) => {
     await usersService.removeMembership({
       businessId: req.tenant.businessId,
       membershipId: req.params.membershipId,
       actorRole: req.tenant.role,
+      actorUserId: req.auth.userId,
     });
     res.status(204).end();
   },

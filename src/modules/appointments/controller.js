@@ -14,5 +14,6 @@ export const appointmentsController = {
     businessId: req.tenant.businessId,
     appointmentId: req.params.appointmentId,
     status: req.body.status,
+    actorUserId: req.auth.userId,
   }) }),
 };

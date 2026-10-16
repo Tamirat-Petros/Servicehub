@@ -14,6 +14,9 @@ import { publicServicesRoutes, servicesRoutes } from './modules/services/routes.
 import { staffRoutes } from './modules/staff/routes.js';
 import { schedulesRoutes } from './modules/schedules/routes.js';
 import { usersRoutes } from './modules/users/routes.js';
+import { publicReviewsRoutes } from './modules/reviews/routes.js';
+import { notificationsRoutes } from './modules/notifications/routes.js';
+import { auditLogsRoutes } from './modules/audit-logs/routes.js';
 
 export const app = express();
 app.use(requestLogger);
@@ -25,11 +28,13 @@ app.use('/api', apiRateLimiter);
 app.use('/api/v1', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', usersRoutes);
+app.use('/api/v1/notifications', notificationsRoutes);
+app.use('/api/v1/audit-logs', auditLogsRoutes);
 app.use('/api/v1/businesses', businessesRoutes);
 app.use('/api/v1/services', servicesRoutes);
 app.use('/api/v1/staff', staffRoutes);
 app.use('/api/v1/schedules', schedulesRoutes);
 app.use('/api/v1/appointments', appointmentsRoutes);
-app.use('/api/v1/public/businesses', publicServicesRoutes, publicAppointmentsRoutes);
+app.use('/api/v1/public/businesses', publicServicesRoutes, publicAppointmentsRoutes, publicReviewsRoutes);
 app.use(notFound);
 app.use(errorHandler);

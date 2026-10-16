@@ -12,7 +12,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
 endobj
 5 0 obj
-<< /Length 3244 >>
+<< /Length 3198 >>
 stream
 BT
 /F1 10 Tf
@@ -74,6 +74,12 @@ T*
 T*
 (complete them.) Tj
 T*
+(- Signed-in customers can review their own completed appointments.) Tj
+T*
+(- Booking and management changes create in-app notifications and business-scoped audit) Tj
+T*
+(records.) Tj
+T*
 (- Passwords are stored using Node.js scrypt hashes; registration and login have a stricter) Tj
 T*
 (rate limit.) Tj
@@ -116,12 +122,6 @@ T*
 T*
 (- `src/modules/appointments/` implements public booking, slot availability, tenant) Tj
 T*
-(appointment lists, and status changes.) Tj
-T*
-(- `src/modules/users/` implements profile and business membership management. Review,) Tj
-T*
-(notification, dashboard, audit log, and platform admin modules remain placeholders.) Tj
-T*
 ET
 endstream
 endobj
@@ -129,12 +129,24 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
 endobj
 7 0 obj
-<< /Length 2242 >>
+<< /Length 2567 >>
 stream
 BT
 /F1 10 Tf
 48 790 Td
 13 TL
+(appointment lists, and status changes.) Tj
+T*
+(- `src/modules/users/` implements profile and business membership management.) Tj
+T*
+(- `src/modules/reviews/`, `src/modules/notifications/`, and `src/modules/audit-logs/`) Tj
+T*
+(implement completed-appointment reviews, private in-app notifications, and scoped change) Tj
+T*
+(history.) Tj
+T*
+(- `src/modules/` also contains placeholder modules for dashboard and platform admin.) Tj
+T*
 (- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and) Tj
 T*
 (migrations cover users, businesses, memberships, services, staff, weekly schedules, and) Tj
@@ -155,13 +167,11 @@ T*
 T*
 () Tj
 T*
-(Password reset, email verification, refresh tokens, session revocation, and broader user and) Tj
+(Password reset, email verification, refresh tokens, and session revocation are not) Tj
 T*
-(business management are not implemented. Reviews, notifications, dashboard, audit-log, and) Tj
+(implemented. Dashboard and platform-admin features are not implemented. Redis, BullMQ, and) Tj
 T*
-(platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are not connected) Tj
-T*
-(yet.) Tj
+(Socket.IO are not connected yet.) Tj
 T*
 () Tj
 T*
@@ -213,7 +223,7 @@ T*
 T*
 (2. Implement appointments and booking conflict handling.) Tj
 T*
-(3. Add reviews, notifications, dashboard, audit logs, and platform administration.) Tj
+(3. Add dashboard reporting and platform administration.) Tj
 T*
 () Tj
 T*
@@ -228,10 +238,10 @@ xref
 0000000121 00000 n 
 0000000191 00000 n 
 0000000317 00000 n 
-0000003613 00000 n 
-0000003739 00000 n 
+0000003567 00000 n 
+0000003693 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-6033
+6312
 %%EOF

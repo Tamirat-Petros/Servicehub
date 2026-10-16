@@ -5,22 +5,22 @@ import { usersRepository } from './repository.js';
 export const usersService = {
   getCurrent: (userId) => authService.getProfile(userId),
   listBusinessMembers: (businessId) => usersRepository.listBusinessMembers(businessId),
-  async addMembership({ businessId, email, role, actorRole }) {
+  async addMembership({ businessId, email, role, actorRole, actorUserId }) {
     if (role === 'ADMIN' && actorRole !== 'OWNER') {
       throw new AppError('Only a business owner can add administrators', { statusCode: 403, code: 'FORBIDDEN' });
     }
     const user = await usersRepository.findUserByEmail(email);
     if (!user) throw new AppError('Create the user account before adding it to this business', { statusCode: 404, code: 'USER_NOT_FOUND' });
-    return usersRepository.addMembership({ businessId, userId: user.id, role });
+    return usersRepository.addMembership({ businessId, userId: user.id, role, actorUserId });
   },
-  async removeMembership({ businessId, membershipId, actorRole }) {
+  async removeMembership({ businessId, membershipId, actorRole, actorUserId }) {
     if (actorRole !== 'OWNER') {
       const members = await usersRepository.listBusinessMembers(businessId);
       const target = members.find((member) => member.id === membershipId);
       if (!target) throw new AppError('Membership not found', { statusCode: 404, code: 'MEMBERSHIP_NOT_FOUND' });
       if (target.role === 'ADMIN') throw new AppError('Only a business owner can remove an administrator', { statusCode: 403, code: 'FORBIDDEN' });
     }
-    const result = await usersRepository.removeMembership({ businessId, membershipId });
+    const result = await usersRepository.removeMembership({ businessId, membershipId, actorUserId });
     if (result.count === 0) throw new AppError('Membership not found or cannot be removed', { statusCode: 404, code: 'MEMBERSHIP_NOT_FOUND' });
   },
 };

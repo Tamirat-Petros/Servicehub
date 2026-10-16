@@ -31,30 +31,36 @@ enum AppointmentStatus {
 }
 
 model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  passwordHash String
-  firstName    String
-  lastName     String
-  status       UserStatus    @default(ACTIVE)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  memberships  Membership[]
-  appointments Appointment[]
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  status        UserStatus     @default(ACTIVE)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  memberships   Membership[]
+  appointments  Appointment[]
+  notifications Notification[]
+  reviews       Review[]
+  auditLogs     AuditLog[]
 }
 
 model Business {
-  id           String         @id @default(cuid())
-  name         String
-  slug         String         @unique
-  status       BusinessStatus @default(ACTIVE)
-  timeZone     String         @default("Africa/Nairobi")
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  memberships  Membership[]
-  services     Service[]
-  staff        StaffMember[]
-  appointments Appointment[]
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  status        BusinessStatus @default(ACTIVE)
+  timeZone      String         @default("Africa/Nairobi")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  memberships   Membership[]
+  services      Service[]
+  staff         StaffMember[]
+  appointments  Appointment[]
+  notifications Notification[]
+  reviews       Review[]
+  auditLogs     AuditLog[]
 }
 
 model Membership {
@@ -155,9 +161,60 @@ model Appointment {
   service        Service           @relation(fields: [serviceId, businessId], references: [id, businessId], onDelete: Restrict)
   staff          StaffMember       @relation(fields: [staffId, businessId], references: [id, businessId], onDelete: Restrict)
   customer       User?             @relation(fields: [customerUserId], references: [id], onDelete: SetNull)
+  review         Review?
 
   @@unique([id, businessId])
   @@index([businessId, startsAt])
   @@index([businessId, staffId, startsAt])
   @@index([customerUserId, startsAt])
+}
+
+model Review {
+  id             String      @id @default(cuid())
+  businessId     String
+  appointmentId  String
+  customerUserId String
+  rating         Int
+  comment        String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  business       Business    @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  appointment    Appointment @relation(fields: [appointmentId, businessId], references: [id, businessId], onDelete: Cascade)
+  customer       User        @relation(fields: [customerUserId], references: [id], onDelete: Cascade)
+
+  @@unique([appointmentId, businessId])
+  @@index([businessId, createdAt])
+}
+
+model Notification {
+  id         String    @id @default(cuid())
+  businessId String
+  userId     String
+  type       String
+  title      String
+  body       String
+  data       Json?
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+  business   Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt, createdAt])
+  @@index([businessId, createdAt])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  businessId  String
+  actorUserId String?
+  action      String
+  entityType  String
+  entityId    String
+  details     Json?
+  createdAt   DateTime @default(now())
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  actor       User?    @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([businessId, createdAt])
+  @@index([businessId, entityType, entityId])
 }

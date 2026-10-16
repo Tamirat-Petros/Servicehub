@@ -8,10 +8,10 @@ export const servicesController = {
     res.status(200).json({ data: catalog });
   },
   list: async (req, res) => res.status(200).json({ data: await servicesService.list(req.tenant.businessId) }),
-  create: async (req, res) => res.status(201).json({ data: await servicesService.create(req.tenant.businessId, req.body) }),
-  update: async (req, res) => res.status(200).json({ data: await servicesService.update(req.tenant.businessId, req.params.serviceId, req.body) }),
+  create: async (req, res) => res.status(201).json({ data: await servicesService.create(req.tenant.businessId, req.body, req.auth.userId) }),
+  update: async (req, res) => res.status(200).json({ data: await servicesService.update(req.tenant.businessId, req.params.serviceId, req.body, req.auth.userId) }),
   deactivate: async (req, res) => {
-    await servicesService.deactivate(req.tenant.businessId, req.params.serviceId);
+    await servicesService.deactivate(req.tenant.businessId, req.params.serviceId, req.auth.userId);
     res.status(204).end();
   },
 };

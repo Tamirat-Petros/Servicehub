@@ -9,3 +9,5 @@
 - Business-scoped routes use a verified membership. Send `X-Business-Id` when an account belongs to more than one business.
 - Schedule weekdays use `0` for Sunday through `6` for Saturday. `startMinute` and `endMinute` are minutes after midnight in the business time zone.
 - Service and staff deletes are soft deletes; existing records and appointment history are kept.
+- A review can be submitted once for an appointment booked by the signed-in account after a manager marks it complete.
+- Notifications are private to their recipient account. Audit logs are private to business owners and administrators.

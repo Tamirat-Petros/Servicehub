@@ -24,6 +24,10 @@ Requires Node.js 22 or newer and PostgreSQL. Run `npm install`, set `DATABASE_UR
 - `POST /api/v1/public/businesses/:businessSlug/appointments` — book a service for a customer. A bearer token is optional; guest name and email are required.
 - `GET /api/v1/appointments` — tenant appointments (owner/admin/staff), with optional `from`, `to`, `staffId`, `cursor`, and `limit` filters.
 - `PATCH /api/v1/appointments/:appointmentId/status` — cancel or complete an appointment (owner/admin).
+- `GET /api/v1/notifications?unreadOnly=true&limit=50` and `PATCH /api/v1/notifications/:notificationId/read` — view and mark your in-app notifications read.
+- `GET /api/v1/audit-logs?cursor=...&limit=50` — read business changes (owner/admin).
+- `GET /api/v1/public/businesses/:businessSlug/reviews` — public reviews.
+- `POST /api/v1/public/businesses/:businessSlug/appointments/:appointmentId/reviews` — review an appointment booked while signed in and marked complete.
 
 Registration expects `email`, `password` (at least 12 characters), `firstName`, `lastName`, and `businessName`. Login expects `email` and `password`.
 
@@ -41,7 +45,7 @@ Registration, login, service management, scheduling, and booking require the dat
 
 ## Next steps
 
-1. Add user invitations and account recovery.
-2. Add reviews, notifications, dashboard, audit logs, and platform administration.
+1. Add password recovery and email verification.
+2. Add dashboard reporting and platform administration.
 
 See `docs/` for architecture, API conventions, and tenancy guidance.

@@ -1,4 +1,5 @@
 import { prisma } from '../../database/prisma.js';
+import { recordAuditLog } from '../../common/utils/index.js';
 
 export const staffRepository = {
   list: (businessId) => prisma.staffMember.findMany({
@@ -6,17 +7,24 @@ export const staffRepository = {
     include: { serviceAssignments: { include: { service: { select: { id: true, name: true, durationMinutes: true } } } } },
     orderBy: { displayName: 'asc' },
   }),
-  create: (businessId, data) => prisma.staffMember.create({ data: { ...data, businessId } }),
-  update: async (businessId, staffId, data) => {
-    const result = await prisma.staffMember.updateMany({ where: { id: staffId, businessId }, data });
+  create: (businessId, data, actorUserId) => prisma.$transaction(async (tx) => {
+    const staff = await tx.staffMember.create({ data: { ...data, businessId } });
+    await recordAuditLog(tx, { businessId, actorUserId, action: 'STAFF_CREATED', entityType: 'StaffMember', entityId: staff.id, details: { displayName: staff.displayName } });
+    return staff;
+  }),
+  update: (businessId, staffId, data, actorUserId) => prisma.$transaction(async (tx) => {
+    const result = await tx.staffMember.updateMany({ where: { id: staffId, businessId }, data });
     if (result.count === 0) return null;
-    return prisma.staffMember.findFirst({ where: { id: staffId, businessId } });
-  },
-  deactivate: async (businessId, staffId) => {
-    const result = await prisma.staffMember.updateMany({ where: { id: staffId, businessId }, data: { isActive: false } });
+    const staff = await tx.staffMember.findFirst({ where: { id: staffId, businessId } });
+    await recordAuditLog(tx, { businessId, actorUserId, action: 'STAFF_UPDATED', entityType: 'StaffMember', entityId: staffId, details: { fields: Object.keys(data) } });
+    return staff;
+  }),
+  deactivate: (businessId, staffId, actorUserId) => prisma.$transaction(async (tx) => {
+    const result = await tx.staffMember.updateMany({ where: { id: staffId, businessId }, data: { isActive: false } });
+    if (result.count > 0) await recordAuditLog(tx, { businessId, actorUserId, action: 'STAFF_DEACTIVATED', entityType: 'StaffMember', entityId: staffId, details: {} });
     return result.count > 0;
-  },
-  setServices: async (businessId, staffId, serviceIds) => prisma.$transaction(async (tx) => {
+  }),
+  setServices: async (businessId, staffId, serviceIds, actorUserId) => prisma.$transaction(async (tx) => {
     const staff = await tx.staffMember.findFirst({ where: { id: staffId, businessId }, select: { id: true } });
     if (!staff) return { kind: 'staff-not-found' };
 
@@ -30,6 +38,7 @@ export const staffRepository = {
     if (serviceIds.length > 0) {
       await tx.staffService.createMany({ data: serviceIds.map((serviceId) => ({ businessId, staffId, serviceId })) });
     }
+    await recordAuditLog(tx, { businessId, actorUserId, action: 'STAFF_SERVICES_UPDATED', entityType: 'StaffMember', entityId: staffId, details: { serviceIds } });
     return { kind: 'updated' };
   }),
 };

@@ -1,4 +1,5 @@
 import { prisma } from '../../database/prisma.js';
+import { createInAppNotifications, recordAuditLog } from '../../common/utils/index.js';
 
 const appointmentSelect = {
   id: true,
@@ -211,6 +212,43 @@ export const appointmentsRepository = {
       },
       select: appointmentSelect,
     });
+
+    const managers = await tx.membership.findMany({
+      where: { businessId: business.id, role: { in: ['OWNER', 'ADMIN'] }, user: { status: 'ACTIVE' } },
+      select: { userId: true },
+    });
+    const recipients = new Map();
+    if (input.customerUserId) {
+      recipients.set(input.customerUserId, {
+        businessId: business.id,
+        userId: input.customerUserId,
+        type: 'APPOINTMENT_CONFIRMED',
+        title: 'Appointment confirmed',
+        body: 'Your appointment is confirmed.',
+        data: { appointmentId: appointment.id },
+      });
+    }
+    for (const { userId } of managers) {
+      if (!recipients.has(userId)) {
+        recipients.set(userId, {
+          businessId: business.id,
+          userId,
+          type: 'APPOINTMENT_CREATED',
+          title: 'New appointment booked',
+          body: 'A customer booked an appointment.',
+          data: { appointmentId: appointment.id },
+        });
+      }
+    }
+    await createInAppNotifications(tx, [...recipients.values()]);
+    await recordAuditLog(tx, {
+      businessId: business.id,
+      actorUserId: input.customerUserId,
+      action: 'APPOINTMENT_BOOKED',
+      entityType: 'Appointment',
+      entityId: appointment.id,
+      details: { serviceId: service.id, staffId: staff.id, startsAt: startsAt.toISOString() },
+    });
     return { kind: 'booked', appointment };
   }),
 
@@ -229,26 +267,47 @@ export const appointmentsRepository = {
     });
   },
 
-  updateStatus: async ({ businessId, appointmentId, status }) => {
-    const current = await prisma.appointment.findFirst({
+  updateStatus: async ({ businessId, appointmentId, status, actorUserId }) => prisma.$transaction(async (tx) => {
+    const current = await tx.appointment.findFirst({
       where: { id: appointmentId, businessId },
-      select: { status: true },
+      select: { id: true, status: true, customerUserId: true },
     });
     if (!current) return { kind: 'not-found' };
     if (current.status === status) {
-      const appointment = await prisma.appointment.findFirst({ where: { id: appointmentId, businessId }, select: appointmentSelect });
+      const appointment = await tx.appointment.findFirst({ where: { id: appointmentId, businessId }, select: appointmentSelect });
       return { kind: 'updated', appointment };
     }
     if (current.status !== 'CONFIRMED') return { kind: 'invalid-transition' };
 
-    const result = await prisma.appointment.updateMany({
+    const result = await tx.appointment.updateMany({
       where: { id: appointmentId, businessId, status: 'CONFIRMED' },
       data: { status },
     });
     if (result.count === 0) return { kind: 'invalid-transition' };
-    return {
-      kind: 'updated',
-      appointment: await prisma.appointment.findFirst({ where: { id: appointmentId, businessId }, select: appointmentSelect }),
-    };
-  },
+    const appointment = await tx.appointment.findFirst({ where: { id: appointmentId, businessId }, select: appointmentSelect });
+    const managers = await tx.membership.findMany({
+      where: { businessId, role: { in: ['OWNER', 'ADMIN'] }, user: { status: 'ACTIVE' } },
+      select: { userId: true },
+    });
+    const title = status === 'CANCELLED' ? 'Appointment cancelled' : 'Appointment completed';
+    const body = status === 'CANCELLED' ? 'An appointment was cancelled.' : 'Your appointment was marked complete.';
+    const recipients = new Set([current.customerUserId, ...managers.map(({ userId }) => userId)].filter(Boolean));
+    await createInAppNotifications(tx, [...recipients].map((userId) => ({
+      businessId,
+      userId,
+      type: `APPOINTMENT_${status}`,
+      title,
+      body,
+      data: { appointmentId },
+    })));
+    await recordAuditLog(tx, {
+      businessId,
+      actorUserId,
+      action: `APPOINTMENT_${status}`,
+      entityType: 'Appointment',
+      entityId: appointmentId,
+      details: {},
+    });
+    return { kind: 'updated', appointment };
+  }),
 };

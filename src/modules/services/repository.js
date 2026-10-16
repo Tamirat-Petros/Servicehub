@@ -1,4 +1,5 @@
 import { prisma } from '../../database/prisma.js';
+import { recordAuditLog } from '../../common/utils/index.js';
 
 export const servicesRepository = {
   findPublicCatalog: (businessSlug) => prisma.business.findFirst({
@@ -30,14 +31,21 @@ export const servicesRepository = {
     where: { businessId },
     orderBy: { name: 'asc' },
   }),
-  create: (businessId, data) => prisma.service.create({ data: { ...data, businessId, price: data.price, currency: data.currency ?? 'KES' } }),
-  update: async (businessId, serviceId, data) => {
-    const result = await prisma.service.updateMany({ where: { id: serviceId, businessId }, data });
+  create: (businessId, data, actorUserId) => prisma.$transaction(async (tx) => {
+    const service = await tx.service.create({ data: { ...data, businessId, price: data.price, currency: data.currency ?? 'KES' } });
+    await recordAuditLog(tx, { businessId, actorUserId, action: 'SERVICE_CREATED', entityType: 'Service', entityId: service.id, details: { name: service.name } });
+    return service;
+  }),
+  update: (businessId, serviceId, data, actorUserId) => prisma.$transaction(async (tx) => {
+    const result = await tx.service.updateMany({ where: { id: serviceId, businessId }, data });
     if (result.count === 0) return null;
-    return prisma.service.findFirst({ where: { id: serviceId, businessId } });
-  },
-  deactivate: async (businessId, serviceId) => {
-    const result = await prisma.service.updateMany({ where: { id: serviceId, businessId }, data: { isActive: false } });
+    const service = await tx.service.findFirst({ where: { id: serviceId, businessId } });
+    await recordAuditLog(tx, { businessId, actorUserId, action: 'SERVICE_UPDATED', entityType: 'Service', entityId: serviceId, details: { fields: Object.keys(data) } });
+    return service;
+  }),
+  deactivate: (businessId, serviceId, actorUserId) => prisma.$transaction(async (tx) => {
+    const result = await tx.service.updateMany({ where: { id: serviceId, businessId }, data: { isActive: false } });
+    if (result.count > 0) await recordAuditLog(tx, { businessId, actorUserId, action: 'SERVICE_DEACTIVATED', entityType: 'Service', entityId: serviceId, details: {} });
     return result.count > 0;
-  },
+  }),
 };
