@@ -13,6 +13,7 @@ import { healthRoutes } from './modules/health/routes.js';
 import { publicServicesRoutes, servicesRoutes } from './modules/services/routes.js';
 import { staffRoutes } from './modules/staff/routes.js';
 import { schedulesRoutes } from './modules/schedules/routes.js';
+import { usersRoutes } from './modules/users/routes.js';
 
 export const app = express();
 app.use(requestLogger);
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api', apiRateLimiter);
 app.use('/api/v1', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/businesses', businessesRoutes);
 app.use('/api/v1/services', servicesRoutes);
 app.use('/api/v1/staff', staffRoutes);

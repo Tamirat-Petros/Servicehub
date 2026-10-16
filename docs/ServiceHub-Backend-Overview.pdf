@@ -12,7 +12,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
 endobj
 5 0 obj
-<< /Length 3286 >>
+<< /Length 3244 >>
 stream
 BT
 /F1 10 Tf
@@ -49,6 +49,10 @@ T*
 (- `POST /api/v1/auth/login` checks the password and returns a 15-minute bearer access token.) Tj
 T*
 (- `GET /api/v1/auth/me` returns the signed-in user and their business memberships.) Tj
+T*
+(- Owners and admins can add existing accounts to a business with ADMIN, STAFF, or CUSTOMER) Tj
+T*
+(roles.) Tj
 T*
 (- `GET /api/v1/businesses/current` returns the active business selected from a verified) Tj
 T*
@@ -114,13 +118,9 @@ T*
 T*
 (appointment lists, and status changes.) Tj
 T*
-(- `src/modules/` also contains placeholder modules for users, reviews, notifications,) Tj
+(- `src/modules/users/` implements profile and business membership management. Review,) Tj
 T*
-(dashboard, audit logs, and platform admin.) Tj
-T*
-(- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and) Tj
-T*
-(migrations cover users, businesses, memberships, services, staff, weekly schedules, and) Tj
+(notification, dashboard, audit log, and platform admin modules remain placeholders.) Tj
 T*
 ET
 endstream
@@ -129,12 +129,16 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
 endobj
 7 0 obj
-<< /Length 2045 >>
+<< /Length 2242 >>
 stream
 BT
 /F1 10 Tf
 48 790 Td
 13 TL
+(- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and) Tj
+T*
+(migrations cover users, businesses, memberships, services, staff, weekly schedules, and) Tj
+T*
 (appointments.) Tj
 T*
 (- `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ) Tj
@@ -224,10 +228,10 @@ xref
 0000000121 00000 n 
 0000000191 00000 n 
 0000000317 00000 n 
-0000003655 00000 n 
-0000003781 00000 n 
+0000003613 00000 n 
+0000003739 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-5878
+6033
 %%EOF

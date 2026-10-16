@@ -12,6 +12,8 @@ Requires Node.js 22 or newer and PostgreSQL. Run `npm install`, set `DATABASE_UR
 - `POST /api/v1/auth/register` — create a user, a business, and an owner membership in one database transaction.
 - `POST /api/v1/auth/login` — verify credentials and return a short-lived bearer access token.
 - `GET /api/v1/auth/me` — return the authenticated user and business memberships.
+- `GET /api/v1/users/me` — alias for the authenticated profile.
+- `GET /api/v1/users/memberships`, `POST /api/v1/users/memberships`, `DELETE /api/v1/users/memberships/:membershipId` — list and manage business memberships (the invited account must already exist; owners/admins only).
 - `GET /api/v1/businesses/current` — return the active business membership. Send `X-Business-Id` when the user belongs to more than one business.
 - `GET /api/v1/services` — list the selected business's services.
 - `POST /api/v1/services`, `PATCH /api/v1/services/:serviceId`, `DELETE /api/v1/services/:serviceId` — manage services (owner/admin).

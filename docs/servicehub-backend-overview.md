@@ -11,6 +11,7 @@ This began as the starter structure for ServiceHub and now includes account, bus
 - `POST /api/v1/auth/register` creates a user, a business, and an owner membership in one transaction.
 - `POST /api/v1/auth/login` checks the password and returns a 15-minute bearer access token.
 - `GET /api/v1/auth/me` returns the signed-in user and their business memberships.
+- Owners and admins can add existing accounts to a business with ADMIN, STAFF, or CUSTOMER roles.
 - `GET /api/v1/businesses/current` returns the active business selected from a verified membership.
 - Services can be listed, created, updated, and deactivated within the selected business.
 - Staff records can be created, updated, deactivated, and assigned to services within the selected business.
@@ -30,7 +31,7 @@ This began as the starter structure for ServiceHub and now includes account, bus
 - `src/modules/auth/` implements registration, login, and current-user profile. `src/modules/businesses/` implements the current business route and membership lookup.
 - `src/modules/services/`, `src/modules/staff/`, and `src/modules/schedules/` implement tenant-filtered management flows.
 - `src/modules/appointments/` implements public booking, slot availability, tenant appointment lists, and status changes.
-- `src/modules/` also contains placeholder modules for users, reviews, notifications, dashboard, audit logs, and platform admin.
+- `src/modules/users/` implements profile and business membership management. Review, notification, dashboard, audit log, and platform admin modules remain placeholders.
 - `src/database/` contains the Prisma client setup and transaction helper. Prisma models and migrations cover users, businesses, memberships, services, staff, weekly schedules, and appointments.
 - `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ jobs, and Socket.IO.
 - `tests/` contains the health endpoint test. `docs/` describes architecture, API conventions, and tenancy guidance.
