@@ -12,7 +12,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
 endobj
 5 0 obj
-<< /Length 3198 >>
+<< /Length 3226 >>
 stream
 BT
 /F1 10 Tf
@@ -80,13 +80,17 @@ T*
 T*
 (records.) Tj
 T*
+(- Owners and admins can view dashboard summaries; platform administrators can review) Tj
+T*
+(platform totals and suspend or reactivate businesses.) Tj
+T*
 (- Passwords are stored using Node.js scrypt hashes; registration and login have a stricter) Tj
 T*
 (rate limit.) Tj
 T*
-(- The health endpoint has an automated test. The test suite has not yet been rerun after the) Tj
+(- The health endpoint has an automated test. The suite has not been rerun since the backend) Tj
 T*
-(auth changes.) Tj
+(features were added.) Tj
 T*
 (- Environment settings are checked with Zod when the app starts.) Tj
 T*
@@ -118,10 +122,6 @@ T*
 T*
 (- `src/modules/services/`, `src/modules/staff/`, and `src/modules/schedules/` implement) Tj
 T*
-(tenant-filtered management flows.) Tj
-T*
-(- `src/modules/appointments/` implements public booking, slot availability, tenant) Tj
-T*
 ET
 endstream
 endobj
@@ -129,12 +129,16 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
 endobj
 7 0 obj
-<< /Length 2567 >>
+<< /Length 2753 >>
 stream
 BT
 /F1 10 Tf
 48 790 Td
 13 TL
+(tenant-filtered management flows.) Tj
+T*
+(- `src/modules/appointments/` implements public booking, slot availability, tenant) Tj
+T*
 (appointment lists, and status changes.) Tj
 T*
 (- `src/modules/users/` implements profile and business membership management.) Tj
@@ -145,13 +149,15 @@ T*
 T*
 (history.) Tj
 T*
-(- `src/modules/` also contains placeholder modules for dashboard and platform admin.) Tj
+(- `src/modules/dashboard/` and `src/modules/platform-admin/` provide business summaries and) Tj
+T*
+(restricted platform operations.) Tj
 T*
 (- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and) Tj
 T*
-(migrations cover users, businesses, memberships, services, staff, weekly schedules, and) Tj
+(migrations cover users, businesses, memberships, services, staff, weekly schedules,) Tj
 T*
-(appointments.) Tj
+(appointments, reviews, notifications, and audit logs.) Tj
 T*
 (- `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ) Tj
 T*
@@ -169,9 +175,9 @@ T*
 T*
 (Password reset, email verification, refresh tokens, and session revocation are not) Tj
 T*
-(implemented. Dashboard and platform-admin features are not implemented. Redis, BullMQ, and) Tj
+(implemented. Redis, BullMQ, and Socket.IO are not connected yet; notifications are stored in) Tj
 T*
-(Socket.IO are not connected yet.) Tj
+(the app database and are not sent by email or push.) Tj
 T*
 () Tj
 T*
@@ -183,9 +189,9 @@ T*
 T*
 (authenticated user's membership and active business status before attaching `req.tenant`. It) Tj
 T*
-(accepts `X-Business-Id` for users with multiple memberships. Future tenant-owned tables) Tj
+(accepts `X-Business-Id` for users with multiple memberships. Tenant-owned models carry) Tj
 T*
-(should include `businessId`, and each repository query should filter by that verified ID.) Tj
+(`businessId`, and feature repositories filter queries by that verified ID.) Tj
 T*
 () Tj
 T*
@@ -219,11 +225,11 @@ T*
 T*
 () Tj
 T*
-(1. Complete user and business management, including password reset and email verification.) Tj
+(1. Add password reset and email verification.) Tj
 T*
-(2. Implement appointments and booking conflict handling.) Tj
+(2. Connect realtime updates and outbound email notifications.) Tj
 T*
-(3. Add dashboard reporting and platform administration.) Tj
+(3. Add background jobs for reminders and other delayed work.) Tj
 T*
 () Tj
 T*
@@ -238,10 +244,10 @@ xref
 0000000121 00000 n 
 0000000191 00000 n 
 0000000317 00000 n 
-0000003567 00000 n 
-0000003693 00000 n 
+0000003595 00000 n 
+0000003721 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-6312
+6526
 %%EOF

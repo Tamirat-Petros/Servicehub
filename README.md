@@ -1,6 +1,6 @@
 # ServiceHub backend
 
-ServiceHub backend for Project 1. Account, business, service, staff, schedule, and appointment flows are implemented. Reviews and the remaining platform modules are still placeholders.
+ServiceHub backend for Project 1. Account, business membership, service, staff, schedule, appointment, review, notification, audit, dashboard, and platform-admin flows are implemented. Password recovery and external integrations remain future work.
 
 ## Setup
 
@@ -28,10 +28,14 @@ Requires Node.js 22 or newer and PostgreSQL. Run `npm install`, set `DATABASE_UR
 - `GET /api/v1/audit-logs?cursor=...&limit=50` — read business changes (owner/admin).
 - `GET /api/v1/public/businesses/:businessSlug/reviews` — public reviews.
 - `POST /api/v1/public/businesses/:businessSlug/appointments/:appointmentId/reviews` — review an appointment booked while signed in and marked complete.
+- `GET /api/v1/dashboard/summary` — business appointment, service, staff, and revenue summary (owner/admin/staff; revenue is hidden from staff).
+- `GET /api/v1/platform-admin/summary`, `GET /api/v1/platform-admin/businesses`, `PATCH /api/v1/platform-admin/businesses/:businessId/status` — platform-wide operations (platform admins only).
 
 Registration expects `email`, `password` (at least 12 characters), `firstName`, `lastName`, and `businessName`. Login expects `email` and `password`.
 
 Registration, login, service management, scheduling, and booking require the database migrations to be applied. Passwords are stored as scrypt hashes. Access tokens expire after 15 minutes by default. Refresh tokens, password reset, email verification, and session revocation are not implemented yet.
+
+To enable the first platform administrator, set `isPlatformAdmin` directly for a trusted user in PostgreSQL after creating their account: `UPDATE "User" SET "isPlatformAdmin" = TRUE WHERE "email" = 'admin@example.com';`. There is no public endpoint for granting platform-admin access.
 
 ## Commands
 
@@ -46,6 +50,6 @@ Registration, login, service management, scheduling, and booking require the dat
 ## Next steps
 
 1. Add password recovery and email verification.
-2. Add dashboard reporting and platform administration.
+2. Connect realtime updates and outbound email notifications.
 
 See `docs/` for architecture, API conventions, and tenancy guidance.

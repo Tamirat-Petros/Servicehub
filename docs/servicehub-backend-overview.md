@@ -20,8 +20,9 @@ This began as the starter structure for ServiceHub and now includes account, bus
 - Business owners and staff can view tenant appointments; owners and admins can cancel or complete them.
 - Signed-in customers can review their own completed appointments.
 - Booking and management changes create in-app notifications and business-scoped audit records.
+- Owners and admins can view dashboard summaries; platform administrators can review platform totals and suspend or reactivate businesses.
 - Passwords are stored using Node.js scrypt hashes; registration and login have a stricter rate limit.
-- The health endpoint has an automated test. The test suite has not yet been rerun after the auth changes.
+- The health endpoint has an automated test. The suite has not been rerun since the backend features were added.
 - Environment settings are checked with Zod when the app starts.
 - Requests are logged, common security headers are set, CORS and JSON parsing are configured, and API requests are rate limited.
 - Errors go through one handler and use a consistent JSON shape: `{ "error": { "code": "...", "message": "..." } }`.
@@ -35,18 +36,18 @@ This began as the starter structure for ServiceHub and now includes account, bus
 - `src/modules/appointments/` implements public booking, slot availability, tenant appointment lists, and status changes.
 - `src/modules/users/` implements profile and business membership management.
 - `src/modules/reviews/`, `src/modules/notifications/`, and `src/modules/audit-logs/` implement completed-appointment reviews, private in-app notifications, and scoped change history.
-- `src/modules/` also contains placeholder modules for dashboard and platform admin.
-- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and migrations cover users, businesses, memberships, services, staff, weekly schedules, and appointments.
+- `src/modules/dashboard/` and `src/modules/platform-admin/` provide business summaries and restricted platform operations.
+- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and migrations cover users, businesses, memberships, services, staff, weekly schedules, appointments, reviews, notifications, and audit logs.
 - `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ jobs, and Socket.IO.
 - `tests/` contains the health endpoint test. `docs/` describes architecture, API conventions, and tenancy guidance.
 
 ## What is not built yet
 
-Password reset, email verification, refresh tokens, and session revocation are not implemented. Dashboard and platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are not connected yet.
+Password reset, email verification, refresh tokens, and session revocation are not implemented. Redis, BullMQ, and Socket.IO are not connected yet; notifications are stored in the app database and are not sent by email or push.
 
 ## Tenant design
 
-The design uses one shared PostgreSQL database. The current tenant middleware checks an authenticated user's membership and active business status before attaching `req.tenant`. It accepts `X-Business-Id` for users with multiple memberships. Future tenant-owned tables should include `businessId`, and each repository query should filter by that verified ID.
+The design uses one shared PostgreSQL database. The current tenant middleware checks an authenticated user's membership and active business status before attaching `req.tenant`. It accepts `X-Business-Id` for users with multiple memberships. Tenant-owned models carry `businessId`, and feature repositories filter queries by that verified ID.
 
 ## Run it locally
 
@@ -62,6 +63,6 @@ PostgreSQL must be running for registration, login, profile, and business routes
 
 ## Suggested build order
 
-1. Complete user and business management, including password reset and email verification.
-2. Implement appointments and booking conflict handling.
-3. Add dashboard reporting and platform administration.
+1. Add password reset and email verification.
+2. Connect realtime updates and outbound email notifications.
+3. Add background jobs for reminders and other delayed work.

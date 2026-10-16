@@ -17,6 +17,8 @@ import { usersRoutes } from './modules/users/routes.js';
 import { publicReviewsRoutes } from './modules/reviews/routes.js';
 import { notificationsRoutes } from './modules/notifications/routes.js';
 import { auditLogsRoutes } from './modules/audit-logs/routes.js';
+import { dashboardRoutes } from './modules/dashboard/routes.js';
+import { platformAdminRoutes } from './modules/platform-admin/routes.js';
 
 export const app = express();
 app.use(requestLogger);
@@ -30,6 +32,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/notifications', notificationsRoutes);
 app.use('/api/v1/audit-logs', auditLogsRoutes);
+app.use('/api/v1/dashboard', dashboardRoutes);
+app.use('/api/v1/platform-admin', platformAdminRoutes);
 app.use('/api/v1/businesses', businessesRoutes);
 app.use('/api/v1/services', servicesRoutes);
 app.use('/api/v1/staff', staffRoutes);
