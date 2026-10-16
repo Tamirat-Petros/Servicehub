@@ -7,3 +7,5 @@
 - Keep controllers thin, use services for operations, and repositories for persistence queries.
 - Authenticated routes use `Authorization: Bearer <accessToken>`.
 - Business-scoped routes use a verified membership. Send `X-Business-Id` when an account belongs to more than one business.
+- Schedule weekdays use `0` for Sunday through `6` for Saturday. `startMinute` and `endMinute` are minutes after midnight in the business time zone.
+- Service and staff deletes are soft deletes; existing records and appointment history are kept.

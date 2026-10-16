@@ -13,6 +13,10 @@ Requires Node.js 22 or newer and PostgreSQL. Run `npm install`, set `DATABASE_UR
 - `POST /api/v1/auth/login` — verify credentials and return a short-lived bearer access token.
 - `GET /api/v1/auth/me` — return the authenticated user and business memberships.
 - `GET /api/v1/businesses/current` — return the active business membership. Send `X-Business-Id` when the user belongs to more than one business.
+- `GET /api/v1/services` — list the selected business's services.
+- `POST /api/v1/services`, `PATCH /api/v1/services/:serviceId`, `DELETE /api/v1/services/:serviceId` — manage services (owner/admin).
+- `GET /api/v1/staff` — list staff; `POST`, `PATCH /:staffId`, `PUT /:staffId/services`, and `DELETE /:staffId` manage staff (owner/admin).
+- `GET /api/v1/schedules?staffId=...` — read weekly availability. `PUT /api/v1/schedules/:staffId` replaces a staff member's schedule (owner/admin).
 
 Registration expects `email`, `password` (at least 12 characters), `firstName`, `lastName`, and `businessName`. Login expects `email` and `password`.
 

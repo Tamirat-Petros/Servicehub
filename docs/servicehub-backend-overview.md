@@ -12,6 +12,9 @@ This began as the starter structure for ServiceHub and now includes the first wo
 - `POST /api/v1/auth/login` checks the password and returns a 15-minute bearer access token.
 - `GET /api/v1/auth/me` returns the signed-in user and their business memberships.
 - `GET /api/v1/businesses/current` returns the active business selected from a verified membership.
+- Services can be listed, created, updated, and deactivated within the selected business.
+- Staff records can be created, updated, deactivated, and assigned to services within the selected business.
+- Managers can replace weekly staff schedules; schedule times use the business time zone.
 - Passwords are stored using Node.js scrypt hashes; registration and login have a stricter rate limit.
 - The health endpoint has an automated test. The test suite has not yet been rerun after the auth changes.
 - Environment settings are checked with Zod when the app starts.
@@ -23,14 +26,15 @@ This began as the starter structure for ServiceHub and now includes the first wo
 - `src/app.js` assembles Express middleware and routes. `src/server.js` starts the listening server.
 - `src/config/` validates settings. `src/middlewares/` includes authentication, tenant membership, RBAC, request validation, rate limiting, and error handling.
 - `src/modules/auth/` implements registration, login, and current-user profile. `src/modules/businesses/` implements the current business route and membership lookup.
-- `src/modules/` also contains placeholder modules for users, services, staff, schedules, appointments, reviews, notifications, dashboard, audit logs, and platform admin.
+- `src/modules/services/`, `src/modules/staff/`, and `src/modules/schedules/` implement tenant-filtered management flows.
+- `src/modules/` also contains placeholder modules for users, appointments, reviews, notifications, dashboard, audit logs, and platform admin.
 - `src/database/` contains the Prisma client setup and transaction helper. `prisma/schema.prisma` and the initial migration define users, businesses, and memberships.
 - `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ jobs, and Socket.IO.
 - `tests/` contains the health endpoint test. `docs/` describes architecture, API conventions, and tenancy guidance.
 
 ## What is not built yet
 
-Password reset, email verification, refresh tokens, session revocation, and broader user and business management are not implemented. Service, staff, schedule, appointment, review, notification, dashboard, audit-log, and platform-admin features remain placeholders. Redis, BullMQ, and Socket.IO are not connected yet.
+Password reset, email verification, refresh tokens, session revocation, and broader user and business management are not implemented. Appointment, review, notification, dashboard, audit-log, and platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are not connected yet.
 
 ## Tenant design
 
@@ -51,7 +55,5 @@ PostgreSQL must be running for registration, login, profile, and business routes
 ## Suggested build order
 
 1. Complete user and business management, including password reset and email verification.
-2. Services and staff.
-3. Schedules.
-4. Appointments.
-5. Reviews, notifications, dashboard, audit logs, and platform administration.
+2. Implement appointments and booking conflict handling.
+3. Add reviews, notifications, dashboard, audit logs, and platform administration.

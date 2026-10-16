@@ -12,7 +12,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
 endobj
 5 0 obj
-<< /Length 3113 >>
+<< /Length 3176 >>
 stream
 BT
 /F1 10 Tf
@@ -54,6 +54,14 @@ T*
 T*
 (membership.) Tj
 T*
+(- Services can be listed, created, updated, and deactivated within the selected business.) Tj
+T*
+(- Staff records can be created, updated, deactivated, and assigned to services within the) Tj
+T*
+(selected business.) Tj
+T*
+(- Managers can replace weekly staff schedules; schedule times use the business time zone.) Tj
+T*
 (- Passwords are stored using Node.js scrypt hashes; registration and login have a stricter) Tj
 T*
 (rate limit.) Tj
@@ -90,9 +98,13 @@ T*
 T*
 (`src/modules/businesses/` implements the current business route and membership lookup.) Tj
 T*
-(- `src/modules/` also contains placeholder modules for users, services, staff, schedules,) Tj
+(- `src/modules/services/`, `src/modules/staff/`, and `src/modules/schedules/` implement) Tj
 T*
-(appointments, reviews, notifications, dashboard, audit logs, and platform admin.) Tj
+(tenant-filtered management flows.) Tj
+T*
+(- `src/modules/` also contains placeholder modules for users, appointments, reviews,) Tj
+T*
+(notifications, dashboard, audit logs, and platform admin.) Tj
 T*
 (- `src/database/` contains the Prisma client setup and transaction helper.) Tj
 T*
@@ -110,18 +122,6 @@ T*
 T*
 (What is not built yet) Tj
 T*
-() Tj
-T*
-(Password reset, email verification, refresh tokens, session revocation, and broader user and) Tj
-T*
-(business management are not implemented. Service, staff, schedule, appointment, review,) Tj
-T*
-(notification, dashboard, audit-log, and platform-admin features remain placeholders. Redis,) Tj
-T*
-(BullMQ, and Socket.IO are not connected yet.) Tj
-T*
-() Tj
-T*
 ET
 endstream
 endobj
@@ -129,12 +129,24 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
 endobj
 7 0 obj
-<< /Length 1401 >>
+<< /Length 1734 >>
 stream
 BT
 /F1 10 Tf
 48 790 Td
 13 TL
+() Tj
+T*
+(Password reset, email verification, refresh tokens, session revocation, and broader user and) Tj
+T*
+(business management are not implemented. Appointment, review, notification, dashboard,) Tj
+T*
+(audit-log, and platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are) Tj
+T*
+(not connected yet.) Tj
+T*
+() Tj
+T*
 (Tenant design) Tj
 T*
 () Tj
@@ -181,13 +193,9 @@ T*
 T*
 (1. Complete user and business management, including password reset and email verification.) Tj
 T*
-(2. Services and staff.) Tj
+(2. Implement appointments and booking conflict handling.) Tj
 T*
-(3. Schedules.) Tj
-T*
-(4. Appointments.) Tj
-T*
-(5. Reviews, notifications, dashboard, audit logs, and platform administration.) Tj
+(3. Add reviews, notifications, dashboard, audit logs, and platform administration.) Tj
 T*
 () Tj
 T*
@@ -202,10 +210,10 @@ xref
 0000000121 00000 n 
 0000000191 00000 n 
 0000000317 00000 n 
-0000003482 00000 n 
-0000003608 00000 n 
+0000003545 00000 n 
+0000003671 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-5061
+5457
 %%EOF

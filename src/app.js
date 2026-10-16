@@ -9,6 +9,9 @@ import { requestLogger } from './middlewares/request-logger.js';
 import { authRoutes } from './modules/auth/routes.js';
 import { businessesRoutes } from './modules/businesses/routes.js';
 import { healthRoutes } from './modules/health/routes.js';
+import { servicesRoutes } from './modules/services/routes.js';
+import { staffRoutes } from './modules/staff/routes.js';
+import { schedulesRoutes } from './modules/schedules/routes.js';
 
 export const app = express();
 app.use(requestLogger);
@@ -20,5 +23,8 @@ app.use('/api', apiRateLimiter);
 app.use('/api/v1', healthRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/businesses', businessesRoutes);
+app.use('/api/v1/services', servicesRoutes);
+app.use('/api/v1/staff', staffRoutes);
+app.use('/api/v1/schedules', schedulesRoutes);
 app.use(notFound);
 app.use(errorHandler);
