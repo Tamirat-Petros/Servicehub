@@ -12,7 +12,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
 endobj
 5 0 obj
-<< /Length 2847 >>
+<< /Length 3113 >>
 stream
 BT
 /F1 10 Tf
@@ -26,11 +26,11 @@ T*
 T*
 () Tj
 T*
-(This is the starter structure for the ServiceHub backend. A scaffold is the foundation of a) Tj
+(This began as the starter structure for ServiceHub and now includes the first working) Tj
 T*
-(project: it gives later features a place to go, but it does not mean those features have) Tj
+(account and business-membership flows. A scaffold is the foundation of a project; the later) Tj
 T*
-(been built.) Tj
+(feature modules are still being built on it.) Tj
 T*
 () Tj
 T*
@@ -42,9 +42,25 @@ T*
 T*
 (- `GET /api/v1/health` responds with `{ "status": "ok" }`.) Tj
 T*
-(- One automated test checks that health response.) Tj
+(- `POST /api/v1/auth/register` creates a user, a business, and an owner membership in one) Tj
 T*
-(- `npm test` and `npm run lint` both pass.) Tj
+(transaction.) Tj
+T*
+(- `POST /api/v1/auth/login` checks the password and returns a 15-minute bearer access token.) Tj
+T*
+(- `GET /api/v1/auth/me` returns the signed-in user and their business memberships.) Tj
+T*
+(- `GET /api/v1/businesses/current` returns the active business selected from a verified) Tj
+T*
+(membership.) Tj
+T*
+(- Passwords are stored using Node.js scrypt hashes; registration and login have a stricter) Tj
+T*
+(rate limit.) Tj
+T*
+(- The health endpoint has an automated test. The test suite has not yet been rerun after the) Tj
+T*
+(auth changes.) Tj
 T*
 (- Environment settings are checked with Zod when the app starts.) Tj
 T*
@@ -66,23 +82,21 @@ T*
 T*
 (server.) Tj
 T*
-(- `src/config/` validates settings. `src/middlewares/` contains request handling stubs and) Tj
+(- `src/config/` validates settings. `src/middlewares/` includes authentication, tenant) Tj
 T*
-(middleware.) Tj
+(membership, RBAC, request validation, rate limiting, and error handling.) Tj
 T*
-(- `src/modules/` groups code by feature. The planned modules are auth, users, businesses,) Tj
+(- `src/modules/auth/` implements registration, login, and current-user profile.) Tj
 T*
-(services, staff, schedules, appointments, reviews, notifications, dashboard, audit logs, and) Tj
+(`src/modules/businesses/` implements the current business route and membership lookup.) Tj
 T*
-(platform admin. Each has routes, controller, service, repository, and validation placeholder) Tj
+(- `src/modules/` also contains placeholder modules for users, services, staff, schedules,) Tj
 T*
-(files.) Tj
+(appointments, reviews, notifications, dashboard, audit logs, and platform admin.) Tj
 T*
-(- `src/database/` contains the Prisma client setup and a transaction helper.) Tj
+(- `src/database/` contains the Prisma client setup and transaction helper.) Tj
 T*
-(`prisma/schema.prisma` defines PostgreSQL as the database provider but has no business) Tj
-T*
-(models yet.) Tj
+(`prisma/schema.prisma` and the initial migration define users, businesses, and memberships.) Tj
 T*
 (- `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ) Tj
 T*
@@ -98,27 +112,13 @@ T*
 T*
 () Tj
 T*
-(Authentication, business and user features, appointment flows, database models, real Redis) Tj
+(Password reset, email verification, refresh tokens, session revocation, and broader user and) Tj
 T*
-(connections, job workers, and Socket.IO events are not implemented. The auth,) Tj
+(business management are not implemented. Service, staff, schedule, appointment, review,) Tj
 T*
-(tenant-context, RBAC, and validation middleware files currently pass requests through; they) Tj
+(notification, dashboard, audit-log, and platform-admin features remain placeholders. Redis,) Tj
 T*
-(do not secure routes yet. The health endpoint is the only implemented route.) Tj
-T*
-() Tj
-T*
-(Tenant design) Tj
-T*
-() Tj
-T*
-(The documented plan is one shared PostgreSQL database. Future tenant-owned tables should) Tj
-T*
-(include `businessId`; tenant repositories should include that ID in every relevant query.) Tj
-T*
-(Tenant context should come from an authenticated business membership. This is design) Tj
-T*
-(guidance only until the models and middleware are implemented.) Tj
+(BullMQ, and Socket.IO are not connected yet.) Tj
 T*
 () Tj
 T*
@@ -129,12 +129,26 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
 endobj
 7 0 obj
-<< /Length 1010 >>
+<< /Length 1401 >>
 stream
 BT
 /F1 10 Tf
 48 790 Td
 13 TL
+(Tenant design) Tj
+T*
+() Tj
+T*
+(The design uses one shared PostgreSQL database. The current tenant middleware checks an) Tj
+T*
+(authenticated user's membership and active business status before attaching `req.tenant`. It) Tj
+T*
+(accepts `X-Business-Id` for users with multiple memberships. Future tenant-owned tables) Tj
+T*
+(should include `businessId`, and each repository query should filter by that verified ID.) Tj
+T*
+() Tj
+T*
 (Run it locally) Tj
 T*
 () Tj
@@ -145,19 +159,19 @@ T*
 T*
 (1. Run `npm install`.) Tj
 T*
-(2. Optionally copy `.env.example` to `.env` and adjust local settings.) Tj
+(2. Copy `.env.example` to `.env` and set `DATABASE_URL` and a private `JWT_ACCESS_SECRET`.) Tj
 T*
-(3. Run `npm run dev`.) Tj
+(3. Apply the initial migration with `npm run prisma:deploy`.) Tj
 T*
-(4. Open `http://localhost:3000/api/v1/health`.) Tj
+(4. Run `npm run dev`.) Tj
 T*
-(5. Run `npm test` for the health test or `npm run lint` for linting.) Tj
+(5. Open `http://localhost:3000/api/v1/health` or call the auth routes with an API client.) Tj
 T*
 () Tj
 T*
-(The default database and Redis URLs are configuration values only; the app does not connect) Tj
+(PostgreSQL must be running for registration, login, profile, and business routes. Redis is) Tj
 T*
-(to those services yet.) Tj
+(only a configuration value for now; the app does not connect to it yet.) Tj
 T*
 () Tj
 T*
@@ -165,25 +179,15 @@ T*
 T*
 () Tj
 T*
-(1. Authentication and user identity.) Tj
+(1. Complete user and business management, including password reset and email verification.) Tj
 T*
-(2. Tenant context and business-scoped repository filters.) Tj
+(2. Services and staff.) Tj
 T*
-(3. Services and staff.) Tj
+(3. Schedules.) Tj
 T*
-(4. Schedules.) Tj
+(4. Appointments.) Tj
 T*
-(5. Appointments.) Tj
-T*
-() Tj
-T*
-(Git status) Tj
-T*
-() Tj
-T*
-(The scaffold was pushed to the `develop` branch in commit `4f2aef8` \(`Scaffold ServiceHub) Tj
-T*
-(backend`\). The blueprint PDF in the project folder was left uncommitted.) Tj
+(5. Reviews, notifications, dashboard, audit logs, and platform administration.) Tj
 T*
 () Tj
 T*
@@ -198,10 +202,10 @@ xref
 0000000121 00000 n 
 0000000191 00000 n 
 0000000317 00000 n 
-0000003216 00000 n 
-0000003342 00000 n 
+0000003482 00000 n 
+0000003608 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-4404
+5061
 %%EOF

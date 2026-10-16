@@ -5,8 +5,12 @@ export default [
   { ignores: ['node_modules/**', 'coverage/**', 'src/generated/**'] },
   js.configs.recommended,
   {
-    files: ['**/*.js'],
-    languageOptions: { ecmaVersion: 'latest', sourceType: 'module', globals: { ...globals.node, ...globals.vitest } },
+    files: ['**/*.{js,mjs}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: { ...globals.node, ...globals.vitest, Buffer: 'readonly', URL: 'readonly', console: 'readonly' },
+    },
     rules: { 'no-unused-vars': ['error', { argsIgnorePattern: '^_' }] },
   },
 ];

@@ -6,6 +6,8 @@ import { errorHandler } from './middlewares/error-handler.js';
 import { notFound } from './middlewares/not-found.js';
 import { apiRateLimiter } from './middlewares/rate-limiter.js';
 import { requestLogger } from './middlewares/request-logger.js';
+import { authRoutes } from './modules/auth/routes.js';
+import { businessesRoutes } from './modules/businesses/routes.js';
 import { healthRoutes } from './modules/health/routes.js';
 
 export const app = express();
@@ -16,5 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api', apiRateLimiter);
 app.use('/api/v1', healthRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/businesses', businessesRoutes);
 app.use(notFound);
 app.use(errorHandler);
