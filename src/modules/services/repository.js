@@ -1,6 +1,31 @@
 import { prisma } from '../../database/prisma.js';
 
 export const servicesRepository = {
+  findPublicCatalog: (businessSlug) => prisma.business.findFirst({
+    where: { slug: businessSlug, status: 'ACTIVE' },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      timeZone: true,
+      services: {
+        where: { isActive: true },
+        orderBy: { name: 'asc' },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          durationMinutes: true,
+          price: true,
+          currency: true,
+          staffAssignments: {
+            where: { staff: { isActive: true } },
+            select: { staff: { select: { id: true, displayName: true } } },
+          },
+        },
+      },
+    },
+  }),
   list: (businessId) => prisma.service.findMany({
     where: { businessId },
     orderBy: { name: 'asc' },

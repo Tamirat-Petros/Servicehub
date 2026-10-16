@@ -1,6 +1,6 @@
 # ServiceHub backend
 
-ServiceHub backend for Project 1. Authentication and business membership are implemented; the remaining feature modules and integrations are placeholders.
+ServiceHub backend for Project 1. Account, business, service, staff, schedule, and appointment flows are implemented. Reviews and the remaining platform modules are still placeholders.
 
 ## Setup
 
@@ -17,10 +17,15 @@ Requires Node.js 22 or newer and PostgreSQL. Run `npm install`, set `DATABASE_UR
 - `POST /api/v1/services`, `PATCH /api/v1/services/:serviceId`, `DELETE /api/v1/services/:serviceId` — manage services (owner/admin).
 - `GET /api/v1/staff` — list staff; `POST`, `PATCH /:staffId`, `PUT /:staffId/services`, and `DELETE /:staffId` manage staff (owner/admin).
 - `GET /api/v1/schedules?staffId=...` — read weekly availability. `PUT /api/v1/schedules/:staffId` replaces a staff member's schedule (owner/admin).
+- `GET /api/v1/public/businesses/:businessSlug/services` — public service catalog.
+- `GET /api/v1/public/businesses/:businessSlug/availability?serviceId=...&date=YYYY-MM-DD` — available staff booking times for that business-local date.
+- `POST /api/v1/public/businesses/:businessSlug/appointments` — book a service for a customer. A bearer token is optional; guest name and email are required.
+- `GET /api/v1/appointments` — tenant appointments (owner/admin/staff), with optional `from`, `to`, `staffId`, `cursor`, and `limit` filters.
+- `PATCH /api/v1/appointments/:appointmentId/status` — cancel or complete an appointment (owner/admin).
 
 Registration expects `email`, `password` (at least 12 characters), `firstName`, `lastName`, and `businessName`. Login expects `email` and `password`.
 
-Registration, login, and authenticated requests that access business data require the database migration to be applied. Passwords are stored as scrypt hashes. Access tokens expire after 15 minutes by default. This first slice does not yet implement refresh tokens, password reset, email verification, or session revocation.
+Registration, login, service management, scheduling, and booking require the database migrations to be applied. Passwords are stored as scrypt hashes. Access tokens expire after 15 minutes by default. Refresh tokens, password reset, email verification, and session revocation are not implemented yet.
 
 ## Commands
 
@@ -34,10 +39,7 @@ Registration, login, and authenticated requests that access business data requir
 
 ## Next steps
 
-1. Implement authentication and identity.
-2. Enforce tenant context and repository-level `businessId` filtering.
-3. Build services and staff.
-4. Add schedules.
-5. Implement appointments.
+1. Add user invitations and account recovery.
+2. Add reviews, notifications, dashboard, audit logs, and platform administration.
 
 See `docs/` for architecture, API conventions, and tenancy guidance.

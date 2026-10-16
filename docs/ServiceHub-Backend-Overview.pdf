@@ -12,7 +12,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
 endobj
 5 0 obj
-<< /Length 3176 >>
+<< /Length 3286 >>
 stream
 BT
 /F1 10 Tf
@@ -26,11 +26,11 @@ T*
 T*
 () Tj
 T*
-(This began as the starter structure for ServiceHub and now includes the first working) Tj
+(This began as the starter structure for ServiceHub and now includes account, business,) Tj
 T*
-(account and business-membership flows. A scaffold is the foundation of a project; the later) Tj
+(service, staff, scheduling, and appointment flows. A scaffold is the foundation of a) Tj
 T*
-(feature modules are still being built on it.) Tj
+(project; the remaining feature modules are being built on it.) Tj
 T*
 () Tj
 T*
@@ -61,6 +61,14 @@ T*
 (selected business.) Tj
 T*
 (- Managers can replace weekly staff schedules; schedule times use the business time zone.) Tj
+T*
+(- Customers can view public service catalogs and available time slots, then book) Tj
+T*
+(appointments as guests or signed-in users.) Tj
+T*
+(- Business owners and staff can view tenant appointments; owners and admins can cancel or) Tj
+T*
+(complete them.) Tj
 T*
 (- Passwords are stored using Node.js scrypt hashes; registration and login have a stricter) Tj
 T*
@@ -102,13 +110,32 @@ T*
 T*
 (tenant-filtered management flows.) Tj
 T*
-(- `src/modules/` also contains placeholder modules for users, appointments, reviews,) Tj
+(- `src/modules/appointments/` implements public booking, slot availability, tenant) Tj
 T*
-(notifications, dashboard, audit logs, and platform admin.) Tj
+(appointment lists, and status changes.) Tj
 T*
-(- `src/database/` contains the Prisma client setup and transaction helper.) Tj
+(- `src/modules/` also contains placeholder modules for users, reviews, notifications,) Tj
 T*
-(`prisma/schema.prisma` and the initial migration define users, businesses, and memberships.) Tj
+(dashboard, audit logs, and platform admin.) Tj
+T*
+(- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and) Tj
+T*
+(migrations cover users, businesses, memberships, services, staff, weekly schedules, and) Tj
+T*
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 2045 >>
+stream
+BT
+/F1 10 Tf
+48 790 Td
+13 TL
+(appointments.) Tj
 T*
 (- `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ) Tj
 T*
@@ -122,28 +149,15 @@ T*
 T*
 (What is not built yet) Tj
 T*
-ET
-endstream
-endobj
-6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
-endobj
-7 0 obj
-<< /Length 1734 >>
-stream
-BT
-/F1 10 Tf
-48 790 Td
-13 TL
 () Tj
 T*
 (Password reset, email verification, refresh tokens, session revocation, and broader user and) Tj
 T*
-(business management are not implemented. Appointment, review, notification, dashboard,) Tj
+(business management are not implemented. Reviews, notifications, dashboard, audit-log, and) Tj
 T*
-(audit-log, and platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are) Tj
+(platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are not connected) Tj
 T*
-(not connected yet.) Tj
+(yet.) Tj
 T*
 () Tj
 T*
@@ -210,10 +224,10 @@ xref
 0000000121 00000 n 
 0000000191 00000 n 
 0000000317 00000 n 
-0000003545 00000 n 
-0000003671 00000 n 
+0000003655 00000 n 
+0000003781 00000 n 
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-5457
+5878
 %%EOF

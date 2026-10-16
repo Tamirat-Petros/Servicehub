@@ -2,7 +2,7 @@
 
 ## In one sentence
 
-This began as the starter structure for ServiceHub and now includes the first working account and business-membership flows. A scaffold is the foundation of a project; the later feature modules are still being built on it.
+This began as the starter structure for ServiceHub and now includes account, business, service, staff, scheduling, and appointment flows. A scaffold is the foundation of a project; the remaining feature modules are being built on it.
 
 ## What works today
 
@@ -15,6 +15,8 @@ This began as the starter structure for ServiceHub and now includes the first wo
 - Services can be listed, created, updated, and deactivated within the selected business.
 - Staff records can be created, updated, deactivated, and assigned to services within the selected business.
 - Managers can replace weekly staff schedules; schedule times use the business time zone.
+- Customers can view public service catalogs and available time slots, then book appointments as guests or signed-in users.
+- Business owners and staff can view tenant appointments; owners and admins can cancel or complete them.
 - Passwords are stored using Node.js scrypt hashes; registration and login have a stricter rate limit.
 - The health endpoint has an automated test. The test suite has not yet been rerun after the auth changes.
 - Environment settings are checked with Zod when the app starts.
@@ -27,14 +29,15 @@ This began as the starter structure for ServiceHub and now includes the first wo
 - `src/config/` validates settings. `src/middlewares/` includes authentication, tenant membership, RBAC, request validation, rate limiting, and error handling.
 - `src/modules/auth/` implements registration, login, and current-user profile. `src/modules/businesses/` implements the current business route and membership lookup.
 - `src/modules/services/`, `src/modules/staff/`, and `src/modules/schedules/` implement tenant-filtered management flows.
-- `src/modules/` also contains placeholder modules for users, appointments, reviews, notifications, dashboard, audit logs, and platform admin.
-- `src/database/` contains the Prisma client setup and transaction helper. `prisma/schema.prisma` and the initial migration define users, businesses, and memberships.
+- `src/modules/appointments/` implements public booking, slot availability, tenant appointment lists, and status changes.
+- `src/modules/` also contains placeholder modules for users, reviews, notifications, dashboard, audit logs, and platform admin.
+- `src/database/` contains the Prisma client setup and transaction helper. Prisma models and migrations cover users, businesses, memberships, services, staff, weekly schedules, and appointments.
 - `src/lib/`, `src/jobs/`, and `src/realtime/` hold placeholders for logging, Redis/BullMQ jobs, and Socket.IO.
 - `tests/` contains the health endpoint test. `docs/` describes architecture, API conventions, and tenancy guidance.
 
 ## What is not built yet
 
-Password reset, email verification, refresh tokens, session revocation, and broader user and business management are not implemented. Appointment, review, notification, dashboard, audit-log, and platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are not connected yet.
+Password reset, email verification, refresh tokens, session revocation, and broader user and business management are not implemented. Reviews, notifications, dashboard, audit-log, and platform-admin features are not implemented. Redis, BullMQ, and Socket.IO are not connected yet.
 
 ## Tenant design
 

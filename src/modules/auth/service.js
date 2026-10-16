@@ -25,7 +25,7 @@ export const authService = {
     });
     return {
       user: toPublicUser(user),
-      business: { id: business.id, name: business.name, slug: business.slug, role: 'OWNER' },
+      business: { id: business.id, name: business.name, slug: business.slug, timeZone: business.timeZone, role: 'OWNER' },
       accessToken: createAccessToken(user.id),
       tokenType: 'Bearer',
     };

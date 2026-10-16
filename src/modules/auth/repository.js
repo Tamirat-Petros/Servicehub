@@ -2,8 +2,8 @@ import { prisma } from '../../database/prisma.js';
 
 export const authRepository = {
   findUserByEmail: (email) => prisma.user.findUnique({ where: { email } }),
-  findUserById: (id) => prisma.user.findUnique({
-    where: { id },
+  findUserById: (id) => prisma.user.findFirst({
+    where: { id, status: 'ACTIVE' },
     select: {
       id: true,
       email: true,
@@ -13,7 +13,7 @@ export const authRepository = {
       memberships: {
         select: {
           role: true,
-          business: { select: { id: true, name: true, slug: true, status: true } },
+          business: { select: { id: true, name: true, slug: true, status: true, timeZone: true } },
         },
         orderBy: { createdAt: 'asc' },
       },

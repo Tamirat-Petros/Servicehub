@@ -12,3 +12,6 @@ servicesRoutes.get('/', servicesController.list);
 servicesRoutes.post('/', requireRole('OWNER', 'ADMIN'), validate(createServiceSchema), servicesController.create);
 servicesRoutes.patch('/:serviceId', requireRole('OWNER', 'ADMIN'), validate(updateServiceSchema), servicesController.update);
 servicesRoutes.delete('/:serviceId', requireRole('OWNER', 'ADMIN'), servicesController.deactivate);
+
+export const publicServicesRoutes = Router();
+publicServicesRoutes.get('/:businessSlug/services', servicesController.publicCatalog);

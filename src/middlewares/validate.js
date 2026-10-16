@@ -9,6 +9,7 @@ export const validate = (schema, source = 'body') => (req, _res, next) => {
       details: result.error.issues.map(({ path, message, code }) => ({ path, message, code })),
     }));
   }
-  req[source] = result.data;
+  if (source === 'query') req.validatedQuery = result.data;
+  else req[source] = result.data;
   return next();
 };

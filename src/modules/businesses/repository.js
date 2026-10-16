@@ -6,7 +6,7 @@ export const businessesRepository = {
     select: {
       businessId: true,
       role: true,
-      business: { select: { id: true, name: true, slug: true, status: true, createdAt: true } },
+      business: { select: { id: true, name: true, slug: true, status: true, timeZone: true, createdAt: true } },
     },
     orderBy: { createdAt: 'asc' },
   }),

@@ -9,3 +9,10 @@ export const authRateLimiter = rateLimit({
   legacyHeaders: false,
   handler: (_req, _res, next) => next(new AppError('Too many authentication attempts; try again later', { statusCode: 429, code: 'RATE_LIMITED' })),
 });
+export const publicBookingRateLimiter = rateLimit({
+  windowMs: 15 * 60_000,
+  limit: 30,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  handler: (_req, _res, next) => next(new AppError('Too many booking requests; try again later', { statusCode: 429, code: 'RATE_LIMITED' })),
+});
